@@ -29,13 +29,15 @@ git clone https://github.com/gopal-kaul/dotfiles.git .
 
 NeoVIM will automatically install it's dependencies when you launch it by running
 
-````sh
-neovim```
+```sh
+neovim
+```
 
 Install TPM by running
+
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-````
+```
 
 Then, to install all the plugins, press Control-A, followed by Shift-i.
 
@@ -44,5 +46,5 @@ I'll hopefully add in more documentation and screenshots soon.
 ## To-Dos
 
 - [x] Setup repository
-- [] Add Screenshots
-- [] Add Documentation
+- [ ] Add Screenshots
+- [ ] Add Documentation
