@@ -433,6 +433,7 @@ local servers = {
   html = {},
   tailwindcss = {},
   rust_analyzer = {},
+  intelephense={},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -478,7 +479,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.eslint_d,
     null_ls.builtins.formatting.prettierd,
     null_ls.builtins.formatting.google_java_format,
-    null_ls.builtins.formatting.rustfmt
+    null_ls.builtins.formatting.rustfmt,
   },
   --function(client)
   --if client.resolved_capabilities.document_formatting then
@@ -594,6 +595,20 @@ vim.keymap.set("n", "<M-6>","6gt",{noremap=true,silent=true})
 vim.keymap.set("n", "<M-7>","7gt",{noremap=true,silent=true})
 vim.keymap.set("n", "<M-8>","8gt",{noremap=true,silent=true})
 vim.keymap.set("n", "<M-9>","9gt",{noremap=true,silent=true})
+
+-- Move lines up and down
+-- nnoremap <A-j> :m .+1<CR>==
+-- nnoremap <A-k> :m .-2<CR>==
+-- inoremap <A-j> <Esc>:m .+1<CR>==gi
+-- inoremap <A-k> <Esc>:m .-2<CR>==gi
+-- vnoremap <A-j> :m '>+1<CR>gv=gv
+-- vnoremap <A-k> :m '<-2<CR>gv=gv
+vim.keymap.set('n', "<A-j>", ":m .+1<CR>==")
+vim.keymap.set('n', "<A-k>", ":m .-2<CR>==")
+vim.keymap.set('i', "<A-j>", "<Esc>:m .+1<CR>==gi")
+vim.keymap.set('i', "<A-k>", "<Esc>:m .-2<CR>==gi")
+vim.keymap.set('v', "<A-j>", ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', "<A-k>", ":m '<-2<CR>gv=gv")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
