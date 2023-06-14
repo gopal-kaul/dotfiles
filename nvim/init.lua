@@ -65,6 +65,8 @@ vim.opt.rtp:prepend(lazypath)
 --
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
+--
+
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
@@ -121,10 +123,8 @@ require('lazy').setup({
   "folke/tokyonight.nvim",
   lazy = false,
   priority = 1000,
-  opts = {},
-    config = function()
-      vim.cmd.colorscheme 'tokyonight-night'
-    end,
+  opts = {
+    },
   },
 
   {
@@ -134,7 +134,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'tokyonight',
         component_separators = '|',
         section_separators = '',
       },
@@ -196,6 +196,34 @@ require('lazy').setup({
   --    to get rid of the warning telling you that there are not plugins in `lua/custom/plugins/`.
   { import = 'custom.plugins' },
 }, {})
+
+-- Setup theme
+
+require("tokyonight").setup({
+
+  style = "moon", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+  light_style = "moon", -- The theme is used when the background is set to light
+  transparent = false, -- Enable this to disable setting the background color
+  terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
+  styles = {
+    comments = { italic = true },
+    keywords = { italic = true },
+    functions = {},
+    variables = {},
+    -- Background styles. Can be "dark", "transparent" or "normal"
+    sidebars = "dark", -- style for sidebars, see below
+    floats = "dark", -- style for floating windows
+  },
+  sidebars = { "qf", "help" }, -- Set a darker background on sidebar-like windows. For example: `["qf", "vista_kind", "terminal", "packer"]`
+  day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
+  hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
+  dim_inactive = false, -- dims inactive windows
+  lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
+  on_colors = function(colors) end,
+  on_highlights = function(highlights, colors) end,
+
+})
+vim.cmd.colorscheme 'tokyonight'
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -609,6 +637,8 @@ vim.keymap.set('i', "<A-j>", "<Esc>:m .+1<CR>==gi")
 vim.keymap.set('i', "<A-k>", "<Esc>:m .-2<CR>==gi")
 vim.keymap.set('v', "<A-j>", ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', "<A-k>", ":m '<-2<CR>gv=gv")
+
+
 
 
 -- The line beneath this is called `modeline`. See `:help modeline`
