@@ -1153,17 +1153,6 @@ do
   vim.keymap.set('n', '<leader>gb', '<cmd>GitBlameToggle<CR>', { desc = '[G]it [B]lame toggle' })
   vim.keymap.set('n', '<leader>go', '<cmd>GitBlameOpenCommitURL<CR>', { desc = '[G]it [O]pen commit URL' })
   vim.keymap.set('n', '<leader>gc', '<cmd>GitBlameCopySHA<CR>', { desc = '[G]it [C]opy commit SHA' })
-  vim.keymap.set('n', '<leader>gd', function()
-    local file = vim.fn.expand '%'
-    local line = vim.fn.line '.'
-    local result = vim.fn.system(string.format('git blame -L %d,%d --porcelain -- %s', line, line, vim.fn.shellescape(file)))
-    local sha = result:match '^(%x+)'
-    if not sha or sha:match '^0+$' then
-      vim.notify('No commit for this line (uncommitted change)', vim.log.levels.WARN)
-      return
-    end
-    vim.cmd('DiffviewOpen ' .. sha .. '^..' .. sha)
-  end, { desc = '[G]it [D]iff commit for this line' })
 
   -- Harpoon 2 - instant jumping between active files
   vim.pack.add { { src = gh 'ThePrimeagen/harpoon', version = 'harpoon2' } }
