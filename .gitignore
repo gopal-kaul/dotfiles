@@ -1,0 +1,17 @@
+# Ignore everything
+*
+
+# Except dotfiles infrastructure
+!.gitignore
+!README.md
+
+# Neovim config
+!nvim/
+!nvim/**
+
+# Tmux config
+!tmux/
+!tmux/**
+
+# Tmux plugins are managed by TPM (auto-installed)
+tmux/plugins/
