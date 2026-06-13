@@ -106,6 +106,30 @@ nvim
 > ```
 > Then initialize the git repo at `~/.config` manually if you want to track changes.
 
+### tmux Plugin Manager (TPM)
+
+[TPM](https://github.com/tmux-plugins/tpm) manages tmux plugins. After cloning:
+
+```sh
+# Install TPM
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+```
+
+Then inside a tmux session:
+
+| Key | Action |
+|-----|--------|
+| `prefix + I` | Install plugins listed in tmux.conf |
+| `prefix + U` | Update plugins |
+| `prefix + alt + u` | Uninstall plugins not in tmux.conf |
+
+> Prefix is `Ctrl-a` (remapped from default `Ctrl-b`).
+
+If you prefer to install without entering tmux:
+```sh
+~/.config/tmux/plugins/tpm/bin/install_plugins
+```
+
 ### Post-Install
 
 On first launch, Neovim will:
