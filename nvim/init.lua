@@ -1166,28 +1166,8 @@ do
       vim.notify('Not committed yet', vim.log.levels.WARN)
       return
     end
-    local show = vim.fn.system { 'git', 'show', '--stat', '--patch', sha }
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(show, '\n'))
-    vim.bo[buf].filetype = 'git'
-    vim.bo[buf].bufhidden = 'wipe'
-    vim.bo[buf].modifiable = false
-    local width = math.floor(vim.o.columns * 0.8)
-    local height = math.floor(vim.o.lines * 0.8)
-    vim.api.nvim_open_win(buf, true, {
-      relative = 'editor',
-      width = width,
-      height = height,
-      col = math.floor((vim.o.columns - width) / 2),
-      row = math.floor((vim.o.lines - height) / 2),
-      style = 'minimal',
-      border = 'rounded',
-      title = ' Commit: ' .. sha:sub(1, 8) .. ' ',
-      title_pos = 'center',
-    })
-    vim.keymap.set('n', 'q', '<cmd>close<CR>', { buffer = buf, silent = true })
-    vim.keymap.set('n', '<Esc>', '<cmd>close<CR>', { buffer = buf, silent = true })
-  end, { desc = '[G]it [S]how commit for this line' })
+    vim.cmd('DiffviewOpen ' .. sha .. '^..' .. sha)
+  end, { desc = '[G]it [S]how commit diff for this line' })
 
   -- Harpoon 2 - instant jumping between active files
   vim.pack.add { { src = gh 'ThePrimeagen/harpoon', version = 'harpoon2' } }
