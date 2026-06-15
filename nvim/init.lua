@@ -674,10 +674,10 @@ do
       map('K', vim.lsp.buf.hover, 'Hover Documentation')
       map('<C-k>', vim.lsp.buf.signature_help, 'Signature Help', 'i')
       map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-      map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+      vim.keymap.set('n', '<leader>rn', function() return ':IncRename ' .. vim.fn.expand '<cword>' end, { buffer = event.buf, expr = true, desc = 'LSP: [R]e[n]ame (live preview)' })
       map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
       map('<leader>lf', function() vim.lsp.buf.format { async = true } end, '[L]SP [F]ormat')
-      map('<leader>lr', vim.lsp.buf.rename, '[L]SP [R]ename')
+      vim.keymap.set('n', '<leader>lr', function() return ':IncRename ' .. vim.fn.expand '<cword>' end, { buffer = event.buf, expr = true, desc = 'LSP: [L]SP [R]ename (live preview)' })
       map('<leader>la', vim.lsp.buf.code_action, '[L]SP Code [A]ction', { 'n', 'x' })
 
       -- The following two autocommands are used to highlight references of the
@@ -851,7 +851,6 @@ do
       -- LSP servers
       'gopls',
       'lua-language-server',
-      'vtsls',
       'eslint-lsp',
       -- Formatters
       'prettierd',
@@ -1087,6 +1086,7 @@ do
   require 'kickstart.plugins.autopairs'
   require 'kickstart.plugins.neo-tree'
   require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+  require 'kickstart.plugins.debug' -- DAP debugger (F5 to start, leader-b for breakpoints)
 
   -- ── Custom Plugins ──────────────────────────────────────────────────────
 
@@ -1297,6 +1297,45 @@ do
   }
   vim.keymap.set('n', '<leader>tf', '<cmd>ToggleTerm direction=float<CR>', { desc = '[T]erminal [F]loating' })
   vim.keymap.set('n', '<leader>tH', '<cmd>ToggleTerm direction=horizontal size=15<CR>', { desc = '[T]erminal [H]orizontal' })
+
+  -- ── Additional IDE Features ─────────────────────────────────────────────
+
+  -- Search & Replace across project (like VSCode Ctrl+Shift+H)
+  vim.pack.add { gh 'MagicDuck/grug-far.nvim' }
+  require('grug-far').setup {}
+  vim.keymap.set('n', '<leader>S', function() require('grug-far').open() end, { desc = '[S]earch & Replace (project)' })
+  vim.keymap.set('v', '<leader>S', function() require('grug-far').open { prefills = { search = vim.fn.expand '<cword>' } } end, { desc = '[S]earch & Replace (word)' })
+
+  -- Incremental rename - live preview as you type new name
+  vim.pack.add { gh 'smjonas/inc-rename.nvim' }
+  require('inc_rename').setup {}
+
+  -- Illuminate - highlight other occurrences of word under cursor
+  vim.pack.add { gh 'RRethy/vim-illuminate' }
+  require('illuminate').configure {
+    delay = 200,
+    large_file_cutoff = 2000,
+    filetypes_denylist = { 'neo-tree', 'toggleterm', 'DressingInput', 'TelescopePrompt' },
+  }
+  vim.keymap.set('n', ']]', function() require('illuminate').goto_next_reference() end, { desc = 'Next reference' })
+  vim.keymap.set('n', '[[', function() require('illuminate').goto_prev_reference() end, { desc = 'Prev reference' })
+
+  -- UFO - better code folding (like VSCode collapse/expand)
+  vim.pack.add { gh 'kevinhwang91/nvim-ufo' }
+  vim.pack.add { gh 'kevinhwang91/promise-async' }
+  vim.o.foldcolumn = '1'
+  vim.o.foldlevel = 99
+  vim.o.foldlevelstart = 99
+  vim.o.foldenable = true
+  require('ufo').setup {
+    provider_selector = function() return { 'treesitter', 'indent' } end,
+  }
+  vim.keymap.set('n', 'zR', require('ufo').openAllFolds, { desc = 'Open all folds' })
+  vim.keymap.set('n', 'zM', require('ufo').closeAllFolds, { desc = 'Close all folds' })
+  vim.keymap.set('n', 'zK', function()
+    local winid = require('ufo').peekFoldedLinesUnderCursor()
+    if not winid then vim.lsp.buf.hover() end
+  end, { desc = 'Peek fold / hover' })
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
